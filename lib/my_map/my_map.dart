@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
 import '../keys.dart';
+import 'repository.dart';
 
 class MyMap extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class MyMap extends StatefulWidget {
 
 class MyMapState extends State<MyMap> {
   MapboxMapController controller;
+  Repository repository = Repository();
 
   @override
   Widget build(BuildContext context) {
