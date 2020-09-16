@@ -4,6 +4,8 @@ analyzer:
     implicit-casts: false
     # If you want something to be dynamic, you should have to actually make it dynamic
     implicit-dynamic: false
+  exclude:
+    - lib/my_map/transloc/*
 
 linter:
   rules:
