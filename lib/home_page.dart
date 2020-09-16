@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 import 'my_dashboard/my_dashboard.dart';
 import 'my_day/my_day.dart';
@@ -29,7 +30,16 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        onTap: (int index) => setState(() => _currentIndex = index),
+        onTap: (int index) async {
+          final location = Location();
+          final hasPermissions = await location.hasPermission();
+          final result = hasPermissions == PermissionStatus.granted
+              ? hasPermissions
+              : await location.requestPermission();
+          if (result == PermissionStatus.granted) {
+            setState(() => _currentIndex = index);
+          }
+        },
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(

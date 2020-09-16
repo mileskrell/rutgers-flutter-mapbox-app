@@ -23,7 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  mapbox_gl: ^0.8.0
+  mapbox_gl: ^0.8.0 # Mapbox
+  location: ^3.0.0 # Location plugin (for showing location on map)
 
 
   # The following adds the Cupertino Icons font to your application.
