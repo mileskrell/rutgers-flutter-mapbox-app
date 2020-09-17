@@ -8,7 +8,7 @@ class Repository {
       ..on('connect', (dynamic data) {
         print(data);
       })
-      ..on('connect', (dynamic data) {
+      ..on('data', (dynamic data) {
         print(data);
       })
       ..on('connect_error', (dynamic data) {
