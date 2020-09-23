@@ -6,6 +6,7 @@ analyzer:
     implicit-dynamic: false
   exclude:
     - lib/my_map/transloc/*
+    - lib/my_map/route.dart
 
 linter:
   rules:
