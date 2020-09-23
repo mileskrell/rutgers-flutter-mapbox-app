@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:rutgers_flutter_mapbox_app/my_map/map_cubit.dart';
+import 'package:rutgers_flutter_mapbox_app/my_map/my_map_cubit.dart';
 
 import '../keys.dart';
 
@@ -58,7 +58,7 @@ class MyMapViewState extends State<MyMapView> {
                 // print("");
                 // return result;
               })) as List;
-              context.bloc<MapCubit>().setRoutes(routesFromJson);
+              context.bloc<MyMapCubit>().setRoutes(routesFromJson);
             }();
           }
         },
