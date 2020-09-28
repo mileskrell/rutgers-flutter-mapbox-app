@@ -6,46 +6,46 @@ class Repository {
     IO.io(BUS_SERVER_URL)
       ..connect()
       ..on('connect', (dynamic data) {
-        print(data);
+        print('connect\n\t\t$data');
       })
       ..on('data', (dynamic data) {
-        print(data);
+        print('data\n\t\t$data');
       })
       ..on('connect_error', (dynamic data) {
-        print(data);
+        print('connect_error\n\t\t$data');
       })
       ..on('connect_timeout', (dynamic data) {
-        print(data);
+        print('connect_timeout\n\t\t$data');
       })
       ..on('connecting', (dynamic data) {
-        print(data);
+        print('connecting\n\t\t$data');
       })
       ..on('disconnect', (dynamic data) {
-        print(data);
+        print('disconnect\n\t\t$data');
       })
       ..on('error', (dynamic data) {
-        print(data);
+        print('error\n\t\t$data');
       })
       ..on('reconnect', (dynamic data) {
-        print(data);
+        print('reconnect\n\t\t$data');
       })
       ..on('reconnect_attempt', (dynamic data) {
-        print(data);
+        print('reconnect_attempt\n\t\t$data');
       })
       ..on('reconnect_failed', (dynamic data) {
-        print(data);
+        print('reconnect_failed\n\t\t$data');
       })
       ..on('reconnect_error', (dynamic data) {
-        print(data);
+        print('reconnect_error\n\t\t$data');
       })
       ..on('reconnecting', (dynamic data) {
-        print(data);
+        print('reconnecting\n\t\t$data');
       })
       ..on('ping', (dynamic data) {
-        print(data);
+        print('ping\n\t\t$data');
       })
       ..on('pong', (dynamic data) {
-        print(data);
+        print('pong\n\t\t$data');
       });
   }
 }
