@@ -15,9 +15,29 @@ class MyMapView extends StatefulWidget {
   State<StatefulWidget> createState() => MyMapViewState();
 }
 
+typedef SymbolCallback = void Function(Symbol);
+
 class MyMapViewState extends State<MyMapView> {
   MapboxMapController controller;
   bool hasSetRoutes = false;
+  SymbolCallback onSymbolTapped = null;
+
+  @override
+  void initState() {
+    super.initState();
+    onSymbolTapped = (Symbol argument) async {
+      final latLng = await controller.getSymbolLatLng(argument);
+      Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text(latLng.toString())),
+      );
+    };
+  }
+
+  @override
+  void dispose() {
+    // TODO: Unregister onSymbolTapped callback
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,41 +63,69 @@ class MyMapViewState extends State<MyMapView> {
         trackCameraPosition: true,
         onMapCreated: (MapboxMapController controller) {
           this.controller = controller;
+          controller.onSymbolTapped.add(onSymbolTapped);
           if (!hasSetRoutes) {
             () async {
-              hasSetRoutes = true;
               final routesFromJson = (await rootBundle
                   .loadStructuredData<dynamic>("assets/transloc.json",
                       (value) async {
                 return json.decode(value);
-                // final i = jsonDecode(value) as Iterable<dynamic>;
-                // final result = i
-                //     .map((dynamic orig) =>
-                //         Route.fromJson(orig as Map<String, dynamic>))
-                //     .toList();
-                // print("");
-                // return result;
               })) as List;
+
               context.bloc<MyMapCubit>().setRoutes(routesFromJson);
+              setState(() => hasSetRoutes = true);
             }();
           }
         },
       ),
       floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.my_location),
         onPressed: () async {
           if (controller == null) return;
-          final myLatLng = await controller.requestMyLocationLatLng();
+          // final myLatLng = await controller.requestMyLocationLatLng();
+          //
+          // final newZoomLevel = min(
+          //   max(14, controller.cameraPosition.zoom + 1),
+          //   18,
+          // ).toDouble();
+          // controller.animateCamera(CameraUpdate.newLatLngZoom(
+          //   myLatLng,
+          //   newZoomLevel,
+          // ));
 
-          final newZoomLevel = min(
-            max(14, controller.cameraPosition.zoom + 1),
-            18,
-          ).toDouble();
-          controller.animateCamera(CameraUpdate.newLatLngZoom(
-            myLatLng,
-            newZoomLevel,
-          ));
+          final routes = context.bloc<MyMapCubit>().getRoutes();
+
+          routes.forEach((dynamic route) {
+            (route["stops"] as List).forEach((dynamic stop) {
+              controller.addSymbol(
+                SymbolOptions(
+                  iconSize: 2,
+                  // "custom-icon.png" in Mapbox example app
+                  iconImage: "assets/stop_icon.png",
+                  geometry: LatLng(
+                    stop["location"]["lat"] as double,
+                    stop["location"]["lng"] as double,
+                  ),
+                ),
+              );
+            });
+            (route["vehicles"] as List).forEach((dynamic vehicle) {
+              controller.addSymbol(
+                SymbolOptions(
+                  iconSize: 1,
+                  // iconColor: "#${route["color"]}",
+                  iconRotate: (vehicle["heading"] as int).toDouble(),
+                  // Modified version of https://materialdesignicons.com/icon/arrow-up
+                  iconImage: "assets/vehicle_icon.png",
+                  geometry: LatLng(
+                    vehicle["location"]["lat"] as double,
+                    vehicle["location"]["lng"] as double,
+                  ),
+                ),
+              );
+            });
+          });
         },
-        child: Icon(Icons.my_location),
       ),
     );
   }
